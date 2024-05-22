@@ -10,6 +10,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -28,7 +29,7 @@ public class ProductController {
 
     @PostMapping("/create")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<ProductDto> createProduct (@Valid @RequestBody ProductDto dto) {
+    public ResponseEntity<Product> createProduct (@Valid @RequestBody ProductDto dto) {
         return productService.createProduct(dto);
     }
 
@@ -42,5 +43,16 @@ public class ProductController {
     @GetMapping("/{productId}")
     public ProductDto getProduct(@PathVariable("productId") Long productId) {
         return productService.getProduct(productId);
+    }
+
+    @DeleteMapping("/delete/{productId}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<String> deleteProduct(@PathVariable("productId") Long productId) {
+        return productService.deleteProduct(productId);
+    }
+
+    @GetMapping("/category/{categoryName}")
+    public List<Product> findProductByCategory(@PathVariable("categoryName") String categoryName) {
+        return productService.findProductByCategory(categoryName);
     }
 }

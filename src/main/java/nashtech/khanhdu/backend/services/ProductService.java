@@ -13,7 +13,7 @@ public interface ProductService {
 
     ProductDto getProduct(Long id);
 
-    ResponseEntity<ProductDto> createProduct(ProductDto dto);
+    ResponseEntity<Product> createProduct(ProductDto dto);
 
     ResponseEntity<Product> updateProduct(Long id, ProductDto dto);
 
@@ -23,7 +23,7 @@ public interface ProductService {
 
     Optional<ProductDto> findProductByName(String name);
 
-    Optional<ProductDto> findProductByCategory(String categoryName);
+    List<Product> findProductByCategory(String categoryName);
 
     Optional<ProductDto> findFeaturedProduct();
 }

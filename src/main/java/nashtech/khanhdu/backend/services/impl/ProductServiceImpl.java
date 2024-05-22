@@ -48,7 +48,7 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ResponseEntity<ProductDto> createProduct(ProductDto dto) {
+    public ResponseEntity<Product> createProduct(ProductDto dto) {
         if (productRepository.findByName(dto.getName()).isPresent()){
             throw new ProductNotFoundException("Product already exists");
         }
@@ -63,8 +63,7 @@ public class ProductServiceImpl implements ProductService {
                       product.getCategories().add(category);
                 });
         productRepository.save(product);
-        dto.setId(product.getId());
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(product);
     }
 
     @Override
@@ -86,7 +85,10 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseEntity<String> deleteProduct(Long id) {
-        return null;
+        Product product = productRepository.findById(id)
+                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        productRepository.delete(product);
+        return ResponseEntity.ok("Delete product successfully");
     }
 
     @Override
@@ -100,8 +102,8 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductDto> findProductByCategory(String categoryName) {
-        return Optional.empty();
+    public List<Product> findProductByCategory(String categoryName) {
+        return productRepository.findAllByCategoryName(categoryName);
     }
 
     @Override
