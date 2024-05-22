@@ -1,6 +1,5 @@
 package nashtech.khanhdu.backend.services;
 
-import jakarta.annotation.security.RolesAllowed;
 import nashtech.khanhdu.backend.dto.ProductDto;
 import nashtech.khanhdu.backend.entities.Product;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +15,7 @@ public interface ProductService {
 
     ResponseEntity<ProductDto> createProduct(ProductDto dto);
 
-    ResponseEntity<ProductDto> updateProduct(Long id, ProductDto dto);
+    ResponseEntity<Product> updateProduct(Long id, ProductDto dto);
 
     ResponseEntity<String> deleteProduct(Long id);
 

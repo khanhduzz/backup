@@ -33,7 +33,8 @@ public class ProductController {
     }
 
     @PutMapping("/update/{productId}")
-    public ResponseEntity<ProductDto> updateProduct(@PathVariable("productId") Long productId,
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<Product> updateProduct(@PathVariable("productId") Long productId,
                                                     @RequestBody ProductDto dto) {
         return productService.updateProduct(productId, dto);
     }

@@ -69,9 +69,19 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     @Transactional
-    public ResponseEntity<ProductDto> updateProduct(Long id, ProductDto dto) {
-        
-        return null;
+    public ResponseEntity<Product> updateProduct(Long id, ProductDto dto) {
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        dto.setId(id);
+        var updateProduct = productMapper.updateProduct(product, dto);
+        updateProduct.setCategories(new HashSet<>());
+        dto.getCategories()
+                .forEach(e -> {
+                    Category category = categoryService.findByNameEquals(e);
+                    if (category == null) throw new CategoryNotFoundException("Category not found");
+                    updateProduct.getCategories().add(category);
+                });
+        productRepository.save(updateProduct);
+        return ResponseEntity.ok(updateProduct);
     }
 
     @Override

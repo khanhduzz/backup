@@ -28,7 +28,6 @@ public class Product {
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-    @JsonIgnore
     @JoinTable(
             name = "CATEGORIES_PRODUCTS",
             joinColumns = @JoinColumn(name = "PRODUCT_ID"),
