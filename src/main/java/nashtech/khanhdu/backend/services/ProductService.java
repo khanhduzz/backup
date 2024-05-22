@@ -1,0 +1,30 @@
+package nashtech.khanhdu.backend.services;
+
+import jakarta.annotation.security.RolesAllowed;
+import nashtech.khanhdu.backend.dto.ProductDto;
+import nashtech.khanhdu.backend.entities.Product;
+import org.springframework.http.ResponseEntity;
+
+import java.util.List;
+import java.util.Optional;
+import java.util.Set;
+
+public interface ProductService {
+    List<Product> getAllProducts();
+
+    ProductDto getProduct(Long id);
+
+    ResponseEntity<ProductDto> createProduct(ProductDto dto);
+
+    ResponseEntity<ProductDto> updateProduct(Long id, ProductDto dto);
+
+    ResponseEntity<String> deleteProduct(Long id);
+
+    ResponseEntity<ProductDto> updateProductCategory(Long id, Set<String> category);
+
+    Optional<ProductDto> findProductByName(String name);
+
+    Optional<ProductDto> findProductByCategory(String categoryName);
+
+    Optional<ProductDto> findFeaturedProduct();
+}
