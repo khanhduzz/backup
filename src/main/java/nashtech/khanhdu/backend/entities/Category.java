@@ -3,9 +3,7 @@ package nashtech.khanhdu.backend.entities;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.validator.constraints.UniqueElements;
 
-import java.util.HashSet;
 import java.util.Set;
 
 @Getter
@@ -22,11 +20,10 @@ public class Category {
     @Column(name = "CATEGORY_ID")
     private Long id;
 
-    @UniqueElements
     private String name;
     private String description;
 
-    @ManyToMany(mappedBy = "categories", cascade = CascadeType.PERSIST)
+    @ManyToMany(mappedBy = "categories", cascade = {CascadeType.REFRESH})
     @ToString.Exclude
     @JsonIgnore
     Set<Product> products;

@@ -16,7 +16,7 @@ public interface CategoryService {
 
     ResponseEntity<CategoryDto> createCategory(CategoryDto dto);
 
-    ResponseEntity<CategoryDto> updateCategory(String name, CategoryDto dto);
+    ResponseEntity<CategoryDto> updateCategory(Long id, CategoryDto dto);
 
     ResponseEntity<String> deleteCategory(Long id);
 }

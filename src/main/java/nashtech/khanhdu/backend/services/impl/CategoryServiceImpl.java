@@ -7,6 +7,7 @@ import nashtech.khanhdu.backend.repositories.CategoryRepository;
 import nashtech.khanhdu.backend.services.CategoryService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -39,12 +40,14 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<CategoryDto> createCategory(CategoryDto dto) {
-        List<Category> categories = categoryRepository.findByName(dto.name());
-        if (!categories.isEmpty()) {
+        Category cate = categoryRepository.findByNameEquals(dto.name());
+        if (cate != null) {
             throw new CategoryNotFoundException("Category existed");
         }
         Category category = new Category();
+        category.setId(0L);
         category.setName(dto.name());
         category.setDescription(dto.description());
         categoryRepository.save(category);
@@ -52,12 +55,25 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public ResponseEntity<CategoryDto> updateCategory(String name, CategoryDto dto) {
-        return null;
+    public ResponseEntity<CategoryDto> updateCategory(Long id, CategoryDto dto) {
+        categoryRepository.findById(id)
+                .map(category -> {
+                    category.setName(dto.name());
+                    category.setDescription(dto.description());
+                    return categoryRepository.save(category);
+                }).orElseThrow(()->new CategoryNotFoundException("Category not found"));
+        return ResponseEntity.ok(dto);
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> deleteCategory(Long id) {
-        return null;
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CategoryNotFoundException("Category not found"));
+        category.getProducts().forEach(product -> {
+            product.getCategories().remove(category);
+        });
+        categoryRepository.delete(category);
+        return ResponseEntity.ok("Delete successfully");
     }
 }

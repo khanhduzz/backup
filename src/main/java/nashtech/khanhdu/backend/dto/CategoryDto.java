@@ -1,4 +1,6 @@
 package nashtech.khanhdu.backend.dto;
 
-public record CategoryDto(String name, String description) {
+import jakarta.validation.constraints.NotNull;
+
+public record CategoryDto(@NotNull String name, String description) {
 }

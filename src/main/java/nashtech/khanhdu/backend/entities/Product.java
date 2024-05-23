@@ -27,14 +27,15 @@ public class Product {
 
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "CATEGORIES_PRODUCTS",
             joinColumns = @JoinColumn(name = "PRODUCT_ID"),
             inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID"))
     Set<Category> categories = new HashSet<>();
 
-    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+//    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
     @JsonIgnore

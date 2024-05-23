@@ -70,6 +70,7 @@ public class AuthConfig {
                     ,"/api-docs/**"
                     ,"/products/**"
                 ).permitAll()
+                .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
                 .requestMatchers(HttpMethod.POST ,"api/products/*").hasRole("ADMIN")
                 .requestMatchers(HttpMethod.PUT ,"api/products/*").hasRole("ADMIN")
                 .anyRequest().authenticated())
