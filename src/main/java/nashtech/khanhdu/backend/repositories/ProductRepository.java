@@ -12,6 +12,10 @@ public interface ProductRepository extends JpaRepository<Product, Long> {
 
     Optional<Product> findByName(String name);
 
+    List<Product> findByNameContaining(String name);
+
+    List<Product> findAllByFeaturedEquals(Integer featured);
+
     @Query("SELECT p FROM Product p JOIN p.categories c WHERE c.name LIKE :name")
     List<Product> findAllByCategoryName(@Param("name") String categoryName);
 }

@@ -1,6 +1,5 @@
 package nashtech.khanhdu.backend.controllers;
 
-import jakarta.annotation.security.RolesAllowed;
 import jakarta.validation.Valid;
 import nashtech.khanhdu.backend.dto.ProductDto;
 import nashtech.khanhdu.backend.entities.Product;
@@ -10,7 +9,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/products")
@@ -22,7 +20,7 @@ public class ProductController {
         this.productService = productService;
     }
 
-    @GetMapping("/all")
+    @GetMapping()
     public List<Product> getAllProducts () {
         return productService.getAllProducts();
     }
@@ -54,5 +52,15 @@ public class ProductController {
     @GetMapping("/category/{categoryName}")
     public List<Product> findProductByCategory(@PathVariable("categoryName") String categoryName) {
         return productService.findProductByCategory(categoryName);
+    }
+
+    @GetMapping("/search/{productName}")
+    public List<Product> findProductByName(@PathVariable("productName") String productName) {
+        return productService.findProductByName(productName);
+    }
+
+    @GetMapping("/feature")
+    public List<Product> findFeaturedProduct() {
+        return productService.findFeaturedProduct();
     }
 }

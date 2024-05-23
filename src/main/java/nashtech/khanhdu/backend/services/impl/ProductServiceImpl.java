@@ -5,6 +5,7 @@ import nashtech.khanhdu.backend.entities.Category;
 import nashtech.khanhdu.backend.entities.Product;
 import nashtech.khanhdu.backend.exceptions.CategoryNotFoundException;
 import nashtech.khanhdu.backend.exceptions.ProductNotFoundException;
+import nashtech.khanhdu.backend.exceptions.SearchingContentIsNotValid;
 import nashtech.khanhdu.backend.mapper.ProductMapper;
 import nashtech.khanhdu.backend.repositories.ProductRepository;
 import nashtech.khanhdu.backend.services.CategoryService;
@@ -15,11 +16,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Service
 public class ProductServiceImpl implements ProductService {
+
+    private final String mess = "Product not found";
 
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
@@ -39,7 +43,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ProductDto getProduct(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException(mess));
         ProductDto dto = productMapper.toDto(product);
         dto.setCategories(new HashSet<>());
         product.getCategories().forEach(category -> dto.getCategories().add(category.getName()));
@@ -69,7 +73,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     @Transactional
     public ResponseEntity<Product> updateProduct(Long id, ProductDto dto) {
-        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        Product product = productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(mess));
         dto.setId(id);
         var updateProduct = productMapper.updateProduct(product, dto);
         updateProduct.setCategories(new HashSet<>());
@@ -86,19 +90,19 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public ResponseEntity<String> deleteProduct(Long id) {
         Product product = productRepository.findById(id)
-                .orElseThrow(() -> new ProductNotFoundException("Product not found"));
+                .orElseThrow(() -> new ProductNotFoundException(mess));
         productRepository.delete(product);
         return ResponseEntity.ok("Delete product successfully");
     }
 
     @Override
-    public ResponseEntity<ProductDto> updateProductCategory(Long id, Set<String> category) {
-        return null;
-    }
-
-    @Override
-    public Optional<ProductDto> findProductByName(String name) {
-        return Optional.empty();
+    public List<Product> findProductByName(String name) {
+        Pattern pattern = Pattern.compile("[a-zA-Z0-9]*");
+        Matcher matcher = pattern.matcher(name);
+        if (!matcher.matches()) {
+            throw new SearchingContentIsNotValid("Searching is not valid");
+        }
+        return productRepository.findByNameContaining(name);
     }
 
     @Override
@@ -107,7 +111,7 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public Optional<ProductDto> findFeaturedProduct() {
-        return Optional.empty();
+    public List<Product> findFeaturedProduct() {
+        return productRepository.findAllByFeaturedEquals(1);
     }
 }

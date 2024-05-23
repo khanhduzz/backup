@@ -68,9 +68,10 @@ public class AuthConfig {
                     "/swagger-ui.html"
                     ,"/swagger-ui/**"
                     ,"/api-docs/**"
+                    ,"/products/**"
                 ).permitAll()
-                .requestMatchers("api/products/**").hasRole("ADMIN")
-                .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
+                .requestMatchers(HttpMethod.POST ,"api/products/*").hasRole("ADMIN")
+                .requestMatchers(HttpMethod.PUT ,"api/products/*").hasRole("ADMIN")
                 .anyRequest().authenticated())
             .addFilterBefore(authFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
