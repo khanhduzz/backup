@@ -2,8 +2,10 @@ package nashtech.khanhdu.backend.controllers;
 
 import jakarta.validation.Valid;
 import nashtech.khanhdu.backend.dto.ProductDto;
+import nashtech.khanhdu.backend.dto.SortedDto;
 import nashtech.khanhdu.backend.entities.Product;
 import nashtech.khanhdu.backend.services.ProductService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -62,5 +64,10 @@ public class ProductController {
     @GetMapping("/feature")
     public List<Product> findFeaturedProduct() {
         return productService.findFeaturedProduct();
+    }
+
+    @GetMapping("/page")
+    public Page<Product> getAllProductSortedBy(@RequestBody SortedDto dto) {
+        return productService.getAllProductSortedBy(dto);
     }
 }

@@ -45,7 +45,6 @@ public class User implements UserDetails {
 
     @ManyToMany(mappedBy = "userOrder")
     @ToString.Exclude
-    @JsonIgnore
     Set<Order> orders;
 
     @Override

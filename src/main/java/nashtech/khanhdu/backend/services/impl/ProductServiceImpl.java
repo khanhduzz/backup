@@ -1,6 +1,7 @@
 package nashtech.khanhdu.backend.services.impl;
 
 import nashtech.khanhdu.backend.dto.ProductDto;
+import nashtech.khanhdu.backend.dto.SortedDto;
 import nashtech.khanhdu.backend.entities.Category;
 import nashtech.khanhdu.backend.entities.Product;
 import nashtech.khanhdu.backend.exceptions.CategoryNotFoundException;
@@ -10,6 +11,10 @@ import nashtech.khanhdu.backend.mapper.ProductMapper;
 import nashtech.khanhdu.backend.repositories.ProductRepository;
 import nashtech.khanhdu.backend.services.CategoryService;
 import nashtech.khanhdu.backend.services.ProductService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -112,5 +117,20 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<Product> findFeaturedProduct() {
         return productRepository.findAllByFeaturedEquals(1);
+    }
+
+    @Override
+    public Page<Product> getAllProductSortedBy(SortedDto dto) {
+        int page = dto.page() == null ? 0 : dto.page();
+        int number = dto.number() == null ? 20 : dto.number();
+        String type = dto.sortedBy();
+        int direction = dto.direction() == null ? 1 : dto.direction();
+        Pageable sorted;
+        if (direction == -1) {
+            sorted = PageRequest.of(page,number, Sort.by(type).ascending());
+        } else {
+            sorted = PageRequest.of(page,number, Sort.by(type).descending());
+        }
+        return productRepository.findAll(sorted);
     }
 }

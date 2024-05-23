@@ -1,5 +1,6 @@
 package nashtech.khanhdu.backend.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -18,11 +19,15 @@ public class Order {
     private Long id;
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinColumn(name = "USER_ID")
+    @ToString.Exclude
+    @JsonIgnore
     private User userOrder;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "PRODUCT_ID")
+    @ToString.Exclude
+    @JsonIgnore
     private Product productOrder;
 }
