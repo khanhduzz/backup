@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -59,8 +60,16 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> deleteUser(Long id) {
-        return null;
+        User user = userRepository.findById(id).orElseThrow(()->new UserExistException("User not found"));
+        userRepository.delete(user);
+        return ResponseEntity.ok("User deleted successfully");
+    }
+
+    @Override
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     @Transactional

@@ -7,6 +7,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 
+import java.util.List;
+
 public interface UserService extends UserDetailsService {
 
     UserDetails signUp (SignUpDto data);
@@ -18,4 +20,6 @@ public interface UserService extends UserDetailsService {
     ResponseEntity<User> updateUser(Long id, UserDto dto);
 
     ResponseEntity<String> deleteUser(Long id);
+
+    List<User> getAllUsers();
 }
