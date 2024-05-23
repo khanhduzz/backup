@@ -69,6 +69,7 @@ public class AuthConfig {
                     ,"/swagger-ui/**"
                     ,"/api-docs/**"
                     ,"/products/**"
+                    ,"/users/*"
                 ).permitAll()
                 .requestMatchers(HttpMethod.POST, "/auth/*").permitAll()
                 .requestMatchers(HttpMethod.POST ,"api/products/*").hasRole("ADMIN")

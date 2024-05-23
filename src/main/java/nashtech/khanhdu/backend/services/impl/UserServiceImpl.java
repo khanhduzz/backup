@@ -77,6 +77,11 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
+    @Override
+    public User getUserById(Long id) {
+        return userRepository.findById(id).orElseThrow(()->new UserExistException("User not found"));
+    }
+
     @Transactional
     public UserDetails signUp (SignUpDto data) throws UserExistException {
         var userByName = userRepository.findOneByUsername(data.username());

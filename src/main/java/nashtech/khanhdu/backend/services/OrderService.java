@@ -3,7 +3,8 @@ package nashtech.khanhdu.backend.services;
 import nashtech.khanhdu.backend.dto.OrderDto;
 import nashtech.khanhdu.backend.entities.Order;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestBody;
+
+import java.util.List;
 
 public interface OrderService {
     ResponseEntity<Order> createOrUpdateOrder(OrderDto dto);
@@ -11,4 +12,6 @@ public interface OrderService {
     ResponseEntity<String> finishOrder(Long userId);
 
     ResponseEntity<Order> deleteOrder(Order order);
+
+    List<Order> findAllByUserId(Long userId);
 }

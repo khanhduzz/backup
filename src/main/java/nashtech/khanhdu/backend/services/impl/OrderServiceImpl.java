@@ -12,6 +12,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+import java.util.Optional;
+
 @Service
 public class OrderServiceImpl implements OrderService {
 
@@ -51,6 +54,7 @@ public class OrderServiceImpl implements OrderService {
         }
         order.setQuantity(dto.quantity());
         orderRepository.save(order);
+        System.out.println(order);
         return ResponseEntity.ok(order);
     }
 
@@ -63,5 +67,10 @@ public class OrderServiceImpl implements OrderService {
     public ResponseEntity<Order> deleteOrder(Order order) {
         orderRepository.delete(order);
         return ResponseEntity.ok(order);
+    }
+
+    @Override
+    public List<Order> findAllByUserId(Long userId) {
+        return orderRepository.findByUserId(userId);
     }
 }

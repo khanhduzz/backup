@@ -22,4 +22,6 @@ public interface UserService extends UserDetailsService {
     ResponseEntity<String> deleteUser(Long id);
 
     List<User> getAllUsers();
+
+    User getUserById(Long id);
 }
