@@ -34,7 +34,6 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID"))
     Set<Category> categories = new HashSet<>();
 
-//    @ManyToMany(cascade = {CascadeType.DETACH, CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @EqualsAndHashCode.Exclude
     @ToString.Exclude
