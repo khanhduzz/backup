@@ -7,6 +7,7 @@ import nashtech.khanhdu.backend.exceptions.UserExistException;
 import nashtech.khanhdu.backend.mapper.UserMapper;
 import nashtech.khanhdu.backend.repositories.RoleRepository;
 import nashtech.khanhdu.backend.repositories.UserRepository;
+import nashtech.khanhdu.backend.services.OrderService;
 import nashtech.khanhdu.backend.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -26,12 +27,14 @@ public class UserServiceImpl implements UserService {
     private final PasswordEncoder passwordEncoder;
     private final RoleRepository roleRepository;
     private final UserMapper userMapper;
+    private final OrderService orderService;
 
-    public UserServiceImpl (UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserMapper userMapper) {
+    public UserServiceImpl (UserRepository userRepository, PasswordEncoder passwordEncoder, RoleRepository roleRepository, UserMapper userMapper, OrderService orderService) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.roleRepository = roleRepository;
         this.userMapper = userMapper;
+        this.orderService = orderService;
     }
 
 
@@ -63,6 +66,8 @@ public class UserServiceImpl implements UserService {
     @Transactional
     public ResponseEntity<String> deleteUser(Long id) {
         User user = userRepository.findById(id).orElseThrow(()->new UserExistException("User not found"));
+        user.getOrders().forEach(orderService::deleteOrder);
+        user.getOrders().clear();
         userRepository.delete(user);
         return ResponseEntity.ok("User deleted successfully");
     }

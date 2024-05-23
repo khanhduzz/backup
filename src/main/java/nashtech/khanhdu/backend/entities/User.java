@@ -43,7 +43,7 @@ public class User implements UserDetails {
     @JsonIgnore
     Set<Product> productsRating;
 
-    @ManyToMany(mappedBy = "userOrder")
+    @OneToMany(mappedBy = "userOrder", cascade = CascadeType.PERSIST)
     @ToString.Exclude
     Set<Order> orders;
 

@@ -44,7 +44,7 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "PRODUCT_ID"))
     Set<User> usersRating = new HashSet<>();
 
-    @ManyToMany(mappedBy = "productOrder")
+    @OneToMany(mappedBy = "productOrder", cascade = CascadeType.PERSIST)
     @ToString.Exclude
     @JsonIgnore
     Set<Order> orders = new HashSet<>();

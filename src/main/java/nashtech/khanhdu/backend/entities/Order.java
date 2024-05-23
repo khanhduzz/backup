@@ -19,13 +19,13 @@ public class Order {
     private Long id;
     private int quantity;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "USER_ID")
     @ToString.Exclude
     @JsonIgnore
     private User userOrder;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "PRODUCT_ID")
     @ToString.Exclude
     @JsonIgnore

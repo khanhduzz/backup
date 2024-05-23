@@ -10,6 +10,7 @@ import nashtech.khanhdu.backend.exceptions.SearchingContentIsNotValid;
 import nashtech.khanhdu.backend.mapper.ProductMapper;
 import nashtech.khanhdu.backend.repositories.ProductRepository;
 import nashtech.khanhdu.backend.services.CategoryService;
+import nashtech.khanhdu.backend.services.OrderService;
 import nashtech.khanhdu.backend.services.ProductService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -32,11 +33,13 @@ public class ProductServiceImpl implements ProductService {
     private final ProductRepository productRepository;
     private final ProductMapper productMapper;
     private final CategoryService categoryService;
+    private final OrderService orderService;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, CategoryService categoryService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, CategoryService categoryService, OrderService orderService) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.categoryService = categoryService;
+        this.orderService = orderService;
     }
 
     @Override
@@ -92,9 +95,12 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional
     public ResponseEntity<String> deleteProduct(Long id) {
         Product product = productRepository.findById(id)
                 .orElseThrow(() -> new ProductNotFoundException(mess));
+        product.getOrders().forEach(orderService::deleteOrder);
+        product.getOrders().clear();
         productRepository.delete(product);
         return ResponseEntity.ok("Delete product successfully");
     }
