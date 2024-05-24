@@ -39,10 +39,9 @@ public class User implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "ROLE_ID"))
     Set<Role> roles;
 
-    @ManyToMany(mappedBy = "usersRating")
+    @OneToMany(mappedBy = "userRating", cascade = CascadeType.PERSIST)
     @ToString.Exclude
-    @JsonIgnore
-    Set<Product> productsRating;
+    Set<Rating> ratings;
 
     @OneToMany(mappedBy = "userOrder", cascade = CascadeType.PERSIST)
     @ToString.Exclude

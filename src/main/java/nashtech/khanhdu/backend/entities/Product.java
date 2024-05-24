@@ -34,15 +34,10 @@ public class Product {
             inverseJoinColumns = @JoinColumn(name = "CATEGORY_ID"))
     Set<Category> categories = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
-    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "productRating", cascade = CascadeType.PERSIST)
     @ToString.Exclude
     @JsonIgnore
-    @JoinTable(
-            name = "USERS_RATING",
-            joinColumns = @JoinColumn(name = "USER_ID"),
-            inverseJoinColumns = @JoinColumn(name = "PRODUCT_ID"))
-    Set<User> usersRating = new HashSet<>();
+    Set<Rating> ratings = new HashSet<>();
 
     @OneToMany(mappedBy = "productOrder", cascade = CascadeType.PERSIST)
     @ToString.Exclude
