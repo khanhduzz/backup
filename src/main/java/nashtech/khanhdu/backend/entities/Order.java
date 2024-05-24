@@ -18,6 +18,8 @@ public class Order {
     @Column(name = "ORDER_ID")
     private Long id;
     private int quantity;
+    private String user;
+    private String product;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST})
     @JoinColumn(name = "USER_ID")

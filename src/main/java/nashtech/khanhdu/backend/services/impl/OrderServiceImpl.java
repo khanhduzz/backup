@@ -53,6 +53,8 @@ public class OrderServiceImpl implements OrderService {
             return ResponseEntity.ok(null);
         }
         order.setQuantity(dto.quantity());
+        order.setUser(order.getUserOrder().getUsername());
+        order.setProduct(order.getProductOrder().getName());
         orderRepository.save(order);
         System.out.println(order);
         return ResponseEntity.ok(order);
