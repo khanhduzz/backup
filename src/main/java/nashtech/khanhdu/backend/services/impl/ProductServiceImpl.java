@@ -12,6 +12,7 @@ import nashtech.khanhdu.backend.repositories.ProductRepository;
 import nashtech.khanhdu.backend.services.CategoryService;
 import nashtech.khanhdu.backend.services.OrderService;
 import nashtech.khanhdu.backend.services.ProductService;
+import nashtech.khanhdu.backend.services.RatingService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -34,12 +35,14 @@ public class ProductServiceImpl implements ProductService {
     private final ProductMapper productMapper;
     private final CategoryService categoryService;
     private final OrderService orderService;
+    private final RatingService ratingService;
 
-    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, CategoryService categoryService, OrderService orderService) {
+    public ProductServiceImpl(ProductRepository productRepository, ProductMapper productMapper, CategoryService categoryService, OrderService orderService, RatingService ratingService) {
         this.productRepository = productRepository;
         this.productMapper = productMapper;
         this.categoryService = categoryService;
         this.orderService = orderService;
+        this.ratingService = ratingService;
     }
 
     @Override
@@ -101,6 +104,8 @@ public class ProductServiceImpl implements ProductService {
                 .orElseThrow(() -> new ProductNotFoundException(mess));
         product.getOrders().forEach(orderService::deleteOrder);
         product.getOrders().clear();
+        product.getRatings().forEach(ratingService::deleteRating);
+        product.getRatings().clear();
         productRepository.delete(product);
         return ResponseEntity.ok("Delete product successfully");
     }

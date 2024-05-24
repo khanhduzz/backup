@@ -56,7 +56,6 @@ public class OrderServiceImpl implements OrderService {
         order.setUser(order.getUserOrder().getUsername());
         order.setProduct(order.getProductOrder().getName());
         orderRepository.save(order);
-        System.out.println(order);
         return ResponseEntity.ok(order);
     }
 
